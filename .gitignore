@@ -1,2 +1,4 @@
 .env
 *.log
+init-task.sql
+init-user.sql
