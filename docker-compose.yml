@@ -80,6 +80,7 @@ services:
     image: ${DOCKERHUB_USERNAME}/taskflow-user-service:latest
     container_name: user-service
     environment:
+      JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-user:5432/${USER_DB_NAME}
       SPRING_DATASOURCE_USERNAME: ${USER_DB_USER}
       SPRING_DATASOURCE_PASSWORD: ${USER_DB_PASSWORD}
@@ -93,6 +94,7 @@ services:
     image: ${DOCKERHUB_USERNAME}/taskflow-task-service:latest
     container_name: task-service
     environment:
+      JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-user:5432/${TASK_DB_NAME}
       SPRING_DATASOURCE_USERNAME: ${TASK_DB_USER}
       SPRING_DATASOURCE_PASSWORD: ${TASK_DB_PASSWORD}
@@ -107,6 +109,7 @@ services:
     ports:
       - "9090:9090"
     environment:
+      JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
       JWT_SECRET: ${JWT_SECRET}
     depends_on:
       - user-service
