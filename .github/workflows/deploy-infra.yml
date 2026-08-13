@@ -48,6 +48,15 @@ jobs:
             EOF
             
             docker compose -f docker-compose-infra.yml up -d
-            
+
+      - name: Copy docker-compose.app.yml to EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{secrets.EC2_HOST}}
+          username: ubuntu
+          key: ${{secrets.EC2_SSH_KEY}}
+          source: "docker-compose-app.yml"
+          target: "~/app"
+
             
             
