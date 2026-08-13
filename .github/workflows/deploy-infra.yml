@@ -19,7 +19,11 @@ jobs:
           host: ${{secrets.EC2_HOST}}
           username: ubuntu
           key: ${{secrets.EC2_SSH_KEY}}
-          source: "docker-compose.infra.yml,init-user.sql,init-task.sql"
+          source: |
+            docker-compose.infra.yml
+            init-user.sql
+            init-task.sql
+          target: "/home/ubuntu/taskflow-infrastructure"
 
       - name: Create Shared Network, Env File & Start Infra Containers
         uses: appleboy/ssh-action@v1.0.3
