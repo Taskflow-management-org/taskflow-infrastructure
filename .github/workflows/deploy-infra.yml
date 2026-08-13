@@ -1,4 +1,52 @@
-name: deploy-infra.yml
+name: Deploy Infrastructure Layer
+
 on:
+  push:
+    branches:
+      - main
 
 jobs:
+  deploy-infra:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Deploy Infrastructure Files to EC2 via SCP
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{secrets.EC2_HOST}}
+          username: ubuntu
+          key: ${{secrets.EC2_SSH_KEY}}
+          source: "docker-compose.infra.yml,init-user.sql,init-task.sql"
+
+      - name: Create Shared Network, Env File & Start Infra Containers
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{secrets.EC2_HOST}}
+          username: ubuntu
+          key: ${{secrets.EC2_SSH_KEY}}
+          script: |
+            mkdir -p ~/app
+            cd ~/app
+            
+            docker network create taskflow-network || true
+            
+            cat << 'EOF' >> .env
+            DOCKERHUB_USERNAME=${{secrets.DOCKERHUB_USERNAME}}
+            USER_DB_NAME=${{secrets.USER_DB_NAME}}
+            USER_DB_USER=${{secrets.USER_DB_USER}}
+            USER_DB_PASSWORD=${{secrets.USER_DB_PASSWORD}}
+            TASK_DB_NAME=${{secrets.TASK_DB_NAME}}
+            TASK_DB_USER=${{secrets.TASK_DB_USER}}
+            TASK_DB_PASSWORD=${{secrets.TASK_DB_PASSWORD}}
+            MONGO_INITDB_ROOT_USERNAME=${{secrets.MONGO_INITDB_ROOT_USERNAME}}
+            MONGO_INITDB_ROOT_PASSWORD=${{secrets.MONGO_INITDB_ROOT_PASSWORD}}
+            MONGO_INITDB_DATABASE=${{secrets.MONGO_INITDB_DATABASE}}
+            EOF
+            
+            docker compose -f docker-compose.infra.yml up -d
+            
+            
+            
