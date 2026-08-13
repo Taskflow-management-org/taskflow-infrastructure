@@ -21,8 +21,7 @@ jobs:
           key: ${{secrets.EC2_SSH_KEY}}
           source: |
             docker-compose.infra.yml
-            init-user.sql
-            init-task.sql
+            init-database.sql
           target: "/home/ubuntu/taskflow-infrastructure"
 
       - name: Create Shared Network, Env File & Start Infra Containers

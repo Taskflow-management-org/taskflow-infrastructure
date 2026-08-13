@@ -10,7 +10,7 @@ services:
       - "5432:5432"
     volumes:
       - postgres-user-data:/var/lib/postgresql/data
-      - ./init-user.sql:/docker-entrypoint-initdb.d/init-user.sql
+      - ./init-user.sql:/docker-entrypoint-initdb.d/init-database.sql
     networks:
       - taskflow-network
 
@@ -25,7 +25,7 @@ services:
       - "5433:5432"
     volumes:
       - postgres-task-data:/var/lib/postgresql/data
-      - ./init-task.sql:/docker-entrypoint-initdb.d/init-task.sql
+      - ./init-task.sql:/docker-entrypoint-initdb.d/init-database.sql
     networks:
       - taskflow-network
 
