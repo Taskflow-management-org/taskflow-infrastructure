@@ -47,7 +47,7 @@ jobs:
             MONGO_INITDB_DATABASE=${{secrets.MONGO_INITDB_DATABASE}}
             EOF
             
-            docker compose -f docker-compose.infra.yml up -d
+            docker compose -f docker-compose-infra.yml up -d
             
             
             
